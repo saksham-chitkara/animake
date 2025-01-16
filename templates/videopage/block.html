@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link href="./static/videopage/blockstyle.css" rel="stylesheet">
+    <link href="./static/videopage/timeline.css" rel="stylesheet">
+    <link href="./static/loader/loader.css" rel="stylesheet">
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+    <script src="./static/videopage/bg-music.js"></script>
+</head>
+<body>
+    <div id="outermost">
+        <div id="top">
+            <div id="pagination">
+                <div id="nav">
+                    <div id="paginate">
+                        <button id='pag_images' onclick="show_images()">Image Files</button>
+                        <button id="pag_audio" onclick="show_audio()">Audio Files</button>
+                    </div>
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+                    <button id="pag_clear" onclick="save()">SAVE</button>
+                </div>
+
+                <div id="select-img">
+                    
+                </div>
+
+                <div id="select-audio">
+                    
+                </div>
+
+            </div>
+
+            <div id="video_preview" onclick=pauseVideo()>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <video controls width="100%" height="100%" id="video">
+                    <source src = "" type="video/mp4">
+                </video>
+                <button id="forward" onclick=forward()>
+                    <img src="./static/videopage/forward.png" width="40px" height="40px">
+                </button>
+                
+                <button id="rewind" onclick=rewind()>
+                    <img src="./static/videopage/rewind.png" width="40px" height="40px">
+                </button>
+                
+                <button id="pause" onclick="pauseVideo()">
+                    <img src="./static/videopage/play.png" width="40px" height="40px" id="pauseimg">
+                </button>
+            </div>
+        </div>
+
+        <div id="middle">
+            <div id="buttons">
+                <div id="left-btns">
+                    <div class="dropdown2">
+                        <button id="start" style="background-color: transparent; border: none; outline: none;">
+                            <img src="./static/videopage/incoming.gif" title="Start Transition"  style="width: 100%; height: 100%; border: 1px solid black; background-color: transparent;">
+                        </button>
+                        <div class="dropdown-content" id = "drop_in">
+                            <a onclick = "in_send_transition(this, 1)" href="#">Fade</a>
+                            <a onclick = "in_send_transition(this, 2)" href="#">Slide</a>
+                            <a onclick = "in_send_transition(this, 3)" href="#">Zoom</a>
+                            <a onclick = "in_send_transition(this, 4)" href="#">Split</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown2">
+                        <button id="end" style="background-color: transparent; border: none; outline: none;">
+                            <img src="./static/videopage/outgoing.gif" title="End Transition" style="width: 100%; height: 100%; border: 1px solid black; background-color: transparent;">
+                        </button>
+                        <div class="dropdown-content" id = "drop_out">
+                            <a onclick = "out_send_transition(this, 1)" href="#">Fade</a>
+                            <a onclick = "out_send_transition(this, 2)" href="#">Slide</a>
+                            <a onclick = "out_send_transition(this, 3)" href="#">Zoom</a>
+                            <a onclick = "out_send_transition(this, 4)" href="#">Split</a>
+                        </div>
+                    </div>
+
+                    <div class="btn-circle-download">
+                        <svg id="arrow" width="40px" height="30px" viewBox="17 14 14 20">
+                          <path d="M24,15 L24,32"></path>
+                          <polyline points="30 27 24 33 18 27"></polyline>
+                        </svg>
+                        <svg id="check" width="60%" height="100%" viewBox="13 17 21 15">
+                          <polyline points="32.5 18.5 20 31 14.5 25.5"></polyline>
+                        </svg>
+                        <svg id="border" width="43px" height="43px" viewBox="0 0 44 44">
+                          <path d="M24,1 L24,1 L24,1 C36.7025492,1 47,11.2974508 47,24 L47,24 L47,24 C47,36.7025492 36.7025492,47 24,47 L24,47 L24,47 C11.2974508,47 1,36.7025492 1,24 L1,24 L1,24 C1,11.2974508 11.2974508,1 24,1 L24,1 Z"></path>
+                        </svg>
+                    </div>
+                    
+                </div>
+
+                <div id="middle-btns">
+                    <button id="stop" style="background-color: transparent; border: none;"  onclick="pauseVideo()">
+                        <img src="./static/videopage/play.png" alt="play" title="play" style="width: 80%; height: 80%;" id="stop_img">
+                    </button>
+
+                    <div id="duration_display">
+                        00:00
+                    </div>
+
+                </div>
+                <!-- quality == width * height -->
+                <!-- resolution == quality -->
+                <div id="right-btns">
+                    <button id="bg_music" onclick="audio()" style="background-color: transparent; border: none;" title="Add Background Music">
+                        <img src="./static/videopage/bg-upload.png" alt="bg-music" width="100%" height="80%">
+                    </button>
+                    <div class="dropdown">
+                        <button id="quality" style="background-color: transparent; border: none;">
+                            <img src="./static/videopage/videoquality.png" style="width: 100%; height: 100%;" alt="resolution">
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="changeVideoQuality('1080p', {width: 1920, height: 1080})">1080p</a>
+                            <a href="#" onclick="changeVideoQuality('720p', {width: 1280, height: 720})">720p</a>
+                            <a href="#" onclick="changeVideoQuality('480p', {width: 640, height: 480})">480p</a>
+                            <a href="#" onclick="changeVideoQuality('360p', {width: 480, height: 360})">360p</a>
+                            <a href="#" onclick="changeVideoQuality('240p', {width: 352, height: 240})">240p</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <button id="resolution" style="background-color: transparent; border: none;">
+                            <img src="./static/videopage/fps.png" style="width: 100%; height: 100%;" alt="quality">
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="changeFps(24)">24 fps</a>
+                            <a href="#" onclick="changeFps(30)">30 fps</a>
+                            <a href="#" onclick="changeFps(60)">60 fps</a>
+                            <a href="#" onclick="changeFps(120)">120 fps</a>
+                        </div>
+                    </div>
+
+                    <div class="create_video" onclick = "createVideo()">
+                        Create Video
+                    </div>
+                </div>
+            </div>
+
+            <div id="scroll-mid">
+                <div id="timeline"></div>
+                <div id="img_placeholder"></div>
+                <div id="audio_bar"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <input type="hidden" id="access_token" value="{{ access_token }}">
+    <input type="hidden" id="username" value="{{ user_name }}">
+    
+    
+    <div id="overlay" class="overlay">
+        <div id="spinner" class="loader"> 
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div> 
+    </div>
+        
+    <script src="./static/videopage/timeline.js"></script>
+    <script src="./static/videopage/node.js"></script>
+    
+    <script src="/static/loader/loader.js"></script>
+    <script>
+        hideOverlayAndSpinner();
+        function changeVideoQuality(quality, dimensions) {
+            const video = document.getElementById('video');
+
+            const source = video.getElementsByTagName('source');
+            const currentSource = source[0].src;
+
+            if(currentSource == "") {
+                window.alert("Please create a video first, before changing the video resolution!");
+            }else{
+                showOverlayAndSpinner();
+                fetch(('/change_video_quality/' + username), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'video_url': currentSource,
+                        'quality': quality,
+                        'dimensions': dimensions,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    source[0].src = data.modified_url;
+                    video.load();
+                    hideOverlayAndSpinner();
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        function changeFps(new_fps) {
+            const video = document.getElementById('video');
+
+            const source = video.getElementsByTagName('source');
+            const currentSource = source[0].src;
+            
+            if(currentSource == "") {
+                window.alert("please create a video first before changing the video quality");
+            }else {
+                showOverlayAndSpinner();
+                fetch(('/change_fps/' + username), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'video_url': currentSource,
+                        'new_fps' : new_fps,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    source[0].src = data.modified_url;
+                    video.load();
+                    hideOverlayAndSpinner();
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        let image_showing = true;
+        let image_datas_left_div = []
+        let image_datas = []
+        let image_widths = []
+        let image_entry = []
+        let image_exit = []
+
+        function in_send_transition(e, val) {
+            let drop_in_ = document.getElementById("drop_in");
+            let drop_in_children = drop_in_.getElementsByTagName("a");
+
+            for(let i = 0; i < drop_in_children.length; i ++) {
+                if(i == val - 1) {
+                    drop_in_children[i].style.backgroundColor = "pink";
+                }else{ 
+                    drop_in_children[i].style.backgroundColor = "white";
+                }
+            }
+
+            if(selected_image_ != null) {
+                let index__ = parseInt(selected_image_.substring(5));
+                image_entry[index__] = val;
+            }
+        } 
+
+        function out_send_transition(e, val) {
+            let drop_out_ = document.getElementById("drop_out");
+            let drop_out_children = drop_out_.getElementsByTagName("a");
+
+            for(let i = 0; i < drop_out_children.length; i ++) {
+                if(i == val - 1) {
+                    drop_out_children[i].style.backgroundColor = "pink";
+                }else{ 
+                    drop_out_children[i].style.backgroundColor = "white";
+                }
+            }
+
+            if(selected_image_ != null) {
+                let index__ = parseInt(selected_image_.substring(5));
+                image_exit[index__] = val;
+            }
+        }
+
+        let selected_image_ = null;
+        function show_images() {
+            image_showing = true;
+            document.getElementById("select-img").style.display='flex';
+            document.getElementById("select-audio").style.display='none';
+        }
+
+        function show_audio() {
+            image_showing = false;
+            document.getElementById("select-img").style.display='none';
+            document.getElementById("select-audio").style.display='flex';
+        }
+        show_images();
+
+        sel_img_count = 0
+        function addImageToSelectContainer(imageData, imgName) {
+            var div_show = document.createElement("div");
+            div_show.classList.add("show_image");
+            div_show.setAttribute("id", "div"+sel_img_count);
+            div_show.title = imgName;
+
+            image_datas_left_div.push(imageData);
+            var img = document.createElement('img');
+            
+            const isJPEG = imageData.startsWith('/9j/');
+            const isPNG = imageData.startsWith('iVBORw0K');
+
+            // Set the source of the image based on its type
+            if (isJPEG) {
+                // Set the source of the JPEG image
+                img.src = `data:image/jpeg;base64, ${imageData}`;
+            } else if (isPNG) {
+                // Set the source of the PNG image
+                img.src = `data:image/png;base64, ${imageData}`;
+            } else {
+                // Unsupported image format
+                console.error('Unsupported image format:', imageData);
+                return;
+            }
+            
+            img.style.width="100%";
+            img.style.height="100%";
+            img.setAttribute("id", imgName);
+            img.setAttribute("alt", "div" + sel_img_count);
+    
+            var del_Icon = document.createElement("button");
+            del_Icon.classList.add("delete");
+
+            var del_img = document.createElement("img");
+            del_img.src = "./static/videopage/bin.png"
+            del_img.style.width = "20px";
+            del_img.style.height = "20px";
+            del_img.setAttribute("id", "bin" + sel_img_count);
+
+            del_Icon.setAttribute("id", "" + sel_img_count);
+            del_Icon.appendChild(del_img);
+            
+            del_img.onclick=function(event) {
+                ide=event.target.id.substring(3);
+                document.getElementById("select-img").removeChild(document.getElementById("div" + ide));
+                
+                let imgs = Array.from(document.getElementById('img_placeholder').children);
+                imgs.forEach(element => {
+                    if(element.title == 'div' + ide) {
+                        document.getElementById('img_placeholder').removeChild(element);
+                    }
+                });
+            };
+            
+            img.onclick = function(event){
+                Idata_index = parseInt(event.target.alt.substring(3));
+                ide = event.target.src;         
+                let container_image = document.getElementById("img_placeholder");
+
+                let tdiv = document.createElement('div');
+                tdiv.setAttribute('class', 'resizable-container');
+                tdiv.setAttribute("title", event.target.alt);
+                tdiv.setAttribute("width", "150px");
+
+                tdiv.style.paddingTop = "1px";
+                tdiv.style.paddingBottom = "1px";
+
+                tdiv.style.paddingLeft = "1px";
+                tdiv.style.paddingRight = "1px";
+
+                tdiv.style.boxSizing = "border-box";
+                tdiv.id = "tdivI" + image_datas.length;
+                
+                var del_Icon1 = document.createElement("button");
+                del_Icon1.classList.add("delete1"); 
+
+                var del_img1 = document.createElement("img");
+                del_img1.src = "./static/videopage/remove.png"
+                del_img1.style.width = "20px";
+                del_img1.style.height = "20px";
+                del_img1.setAttribute("id", "cross" + image_datas.length);
+
+                del_Icon1.appendChild(del_img1);
+                del_img1.onclick=function(event) {
+                    idev=event.target.id.substring(5);
+                    document.getElementById("img_placeholder").removeChild(document.getElementById("tdivI" + idev));
+
+                    image_datas[parseInt(idev)] = -1;
+                    selected_image_ = null;
+                };
+
+                tdiv.onclick = function(e) {
+                    if(tdiv == e.target || tdiv.contains(e.target)) {
+                        console.log(selected_image_)
+                        if(selected_image_ != null) {
+                            let v = document.getElementById(selected_image_);
+                            if(v != null)
+                                v.style.backgroundColor = 'transparent';
+                        }
+                        selected_image_ = tdiv.id;
+
+                        let drop_in_ = document.getElementById("drop_in");
+                        let drop_out_ = document.getElementById("drop_out");
+
+                        let indexTrans = parseInt(selected_image_.substring(5))
+                        let in_ = image_entry[indexTrans]
+                        let out_ = image_exit[indexTrans]
+
+                        let drop_in_children = drop_in_.getElementsByTagName("a");
+                        let drop_out_children = drop_out_.getElementsByTagName("a");
+
+                        for(let i = 0; i < drop_in_children.length; i ++) {
+                            if(i == parseInt(in_) - 1) {
+                                drop_in_children[i].style.backgroundColor = "pink";
+                            }else{ 
+                                drop_in_children[i].style.backgroundColor = "white";
+                            }
+                        }
+
+                        for(let i = 0; i < drop_out_children.length; i ++) {
+                            if(i == parseInt(out_) - 1) {
+                                drop_out_children[i].style.backgroundColor = "pink";
+                            }else {
+                                drop_out_children[i].style.backgroundColor = "white";
+                            }
+                            
+                        }
+                        tdiv.style.backgroundColor = 'rgb(255, 87, 41)';
+                    }
+                };
+                
+                let timg = document.createElement('img');
+                timg.setAttribute('src', ide);
+                timg.setAttribute('width', "99.4%");
+                timg.setAttribute('height', "99.5%");
+                timg.setAttribute('class', 'resizable-image');
+
+                image_datas.push(image_datas_left_div[Idata_index]); // <--- sakshi bhai
+                image_widths.push(150); 
+                
+                image_entry.push(0);
+                image_exit.push(0);
+
+                tdiv.appendChild(timg);
+                tdiv.appendChild(del_Icon1);
+            
+                container_image.appendChild(tdiv);
+    
+                adjustTimeline();
+                updateListeners();
+            }
+
+            div_show.appendChild(img);
+            div_show.appendChild(del_Icon);
+
+            document.getElementById('select-img').appendChild(div_show);
+            sel_img_count ++;
+        }
+
+        let username = document.getElementById('username').value;
+        let access_token = document.getElementById('access_token').value;
+
+        function fetchImageData() {
+            showOverlayAndSpinner();
+            fetch('/retrieve_images/'+username) 
+            .then(response => response.json())
+            .then(data => {
+                hideOverlayAndSpinner();
+                data.forEach(imaged => {
+                    let imgName = imaged.imagename;
+                    let imagedata = imaged.data;
+                    addImageToSelectContainer(imagedata, imgName);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function addAudioToAudioContainer(audioData, audio_d){
+            var div_show = document.createElement("div");
+            div_show.classList.add("audio_div");
+            div_show.id = audioData;
+
+            var icon = document.createElement("div");
+            icon.classList.add("audio_icon");
+
+            var name = document.createElement("div");
+            name.classList.add("audio_name");
+
+            var img = document.createElement("img");
+            img.classList.add("audio-img");
+            img.setAttribute("src", "./static/videopage/mp3.png");
+
+            name.innerHTML += audioData;
+
+            icon.appendChild(img);
+            div_show.appendChild(icon);
+            div_show.appendChild(name);
+
+            document.getElementById("select-audio").appendChild(div_show);
+
+            img.onclick = function(event){
+                let container_image = document.getElementById("audio_bar");
+
+                let tdiv = document.createElement('div');
+                tdiv.setAttribute('class', 'resizable-container');
+                tdiv.setAttribute("width", "150px");
+
+                tdiv.style.paddingTop = "0.25%";
+                tdiv.style.paddingBottom = "0.25%";
+
+                tdiv.style.paddingLeft = "0.3%";
+                tdiv.style.paddingRight = "0.3%";
+
+                tdiv.style.boxSizing = "border-box";
+                tdiv.id = "tdivA" + audio_datas.length;
+
+                var del_Icon2 = document.createElement("button");
+                del_Icon2.classList.add("delete1"); 
+                
+                var del_img2 = document.createElement("img");
+                del_img2.src = "./static/videopage/remove.png"
+                del_img2.style.width = "15px";
+                del_img2.style.height = "15px";
+                del_img2.setAttribute("id", "cross" + audio_datas.length);
+
+                del_Icon2.appendChild(del_img2);
+                del_img2.onclick=function(event) {
+                    idev=event.target.id.substring(5);
+                    document.getElementById("audio_bar").removeChild(document.getElementById("tdivA" + idev));
+
+                    audio_datas[parseInt(idev)] = -1;
+                    selected_audio_ = null;
+                };
+
+                tdiv.addEventListener('click', function(e) {
+                    if(tdiv == e.target || tdiv.contains(e.target)) {
+                        if(selected_audio_ != null) {
+                            let v = document.getElementById(selected_audio_);
+                            if(v != null)
+                                v.style.backgroundColor = 'transparent';
+                        }
+                        selected_audio_ = tdiv.id;
+                        tdiv.style.backgroundColor = 'rgb(255, 87, 41)';
+                    }
+                }, true);
+
+                let timg = document.createElement('img');
+                timg.setAttribute('src', "./static/videopage/signal.png" );
+                timg.setAttribute('height', "100%");
+                timg.setAttribute('class', 'resizable-image');
+                timg.setAttribute('title', audioData);
+
+                audio_datas.push(audio_d);
+                audio_widths.push(150);
+
+                tdiv.appendChild(timg);
+                tdiv.appendChild(del_Icon2);
+    
+                container_image.appendChild(tdiv);
+                updateListeners();
+            }
+        }
+
+        const audio_name = [];
+        const audio_data = [];
+        let audio_datas = [];
+        let audio_widths = [];
+        let selected_audio_ = null;
+
+        function fetchAudioData() {
+            showOverlayAndSpinner();
+            fetch('/retrieve_audio/' + username)
+            .then(response => response.json())
+            .then(data => {
+                hideOverlayAndSpinner();
+                data.forEach(audio => {
+                    let fname = audio.filename;
+                    let audio_d = audio.data;
+                    if(!audio_name.includes(fname)) {
+                        audio_name.push(fname);
+                        audio_data.push(audio_d);
+                        addAudioToAudioContainer(fname, audio_d);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        fetchAudioData();
+        document.getElementById("searchInput").addEventListener("input", function() {
+            const searchTerm = this.value.trim();
+            if(image_showing){
+                filterimages(searchTerm);
+            }
+            else{
+                filteraudio(searchTerm);
+            }
+        });
+
+        function filteraudio(searchTerm) {
+            var inp = searchTerm.toUpperCase();
+            var audios = document.getElementsByClassName('audio_div');
+
+            for (var i = 0; i < audios.length; i++) {
+                var audioName = audios[i].id.toUpperCase();
+
+                if (audioName.indexOf(inp) !== -1) {
+                    audios[i].style.display = "block";
+                } else {
+                    audios[i].style.display = "none";
+                }
+            }
+        }
+
+        function filterimages(searchTerm) {
+            inp = searchTerm.toUpperCase();
+            images = document.getElementsByClassName('show_image');
+
+            for (let i = 0; i < images.length; i++) {
+                imgN = images[i].title.toUpperCase();
+
+                if (imgN.indexOf(inp) !== -1) {
+                    images[i].style.display = "block";
+                }else {
+                    images[i].style.display = "none";
+                }
+            }
+        }
+        fetchImageData();
+
+        function save() {
+            let vid_element = document.getElementById("video");
+            let source = vid_element.getElementsByTagName("source")[0];
+
+            if(!isVideoCreatedOnce) {
+                window.alert("Please create a video first!");
+                return;
+            }
+
+            var proj_name = "";
+            
+            proj_name = prompt("How would you like to name your project:");
+            if (proj_name === null) {
+                alert("Project name cannot be empty. Please provide a name for your project.");
+                return;
+            }
+
+            let video_url_ = source.src;
+            var dataToSend = {
+                'video_URL' : video_url_,
+                'username' : username,
+                'proj_name': proj_name
+            };
+
+            showOverlayAndSpinner();
+            fetch('/save_frame', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            .then(response => {
+                hideOverlayAndSpinner();
+                if (response.ok) {
+                    console.log("Saved!");
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+
+
+            showOverlayAndSpinner();
+            fetch('/delete_stored', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            .then(response => {
+                hideOverlayAndSpinner();
+                if (response.ok) {
+                    showOverlayAndSpinner();
+                    window.location.href="/dashboard?access_token="+access_token;
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+        function updateListeners() {
+            const containers = document.querySelectorAll('.resizable-container');
+
+            containers.forEach(container => {
+                const rightHandle = document.createElement('div');
+                rightHandle.classList.add('resizable-handle', 'right');
+                container.appendChild(rightHandle);
+
+                rightHandle.addEventListener('mousedown', startResize);
+
+                function startResize(e) {
+                    const startX = e.pageX;
+                    const startWidth = container.offsetWidth;
+                    const isLeft = e.target.classList.contains('left');
+
+                    var pressed_mouse = false;
+
+                    function resize(e) {
+                        if(pressed_mouse) {
+                            const widthChange = e.pageX - startX;
+                            const newWidth = startWidth + (isLeft ? -widthChange : widthChange);
+                            container.style.width = newWidth + 'px';
+
+                            let tdiv_id = container.id.substring(4);
+                            if(tdiv_id[0] == 'I')
+                                image_widths[parseInt(tdiv_id.substring(1))] = newWidth;
+                            else if(tdiv_id[0] == 'A')
+                                audio_widths[parseInt(tdiv_id.substring(1))] = newWidth;
+                            adjustTimeline();
+                        }
+                    }
+
+                    function stopResize() {
+                        document.removeEventListener('mousemove', resize);
+                        // document.removeEventListener('mouseout', stopResize);
+                    }
+                    
+                    document.addEventListener('mousedown', function() {
+                        pressed_mouse = true;
+                    });
+
+                    document.addEventListener('mouseup', function() {
+                        pressed_mouse = false;
+                        stopResize();
+                    });
+
+                    document.addEventListener('mousemove', resize);
+                    // document.addEventListener('mouseout', stopResize);
+                }
+            });
+        }
+
+        var isVideoCreatedOnce = false;
+        function createVideo() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/create_movie/" + username, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    
+                    if (response.message == 'no images provided') {
+                        window.alert("Please provide images first!");
+                        hideOverlayAndSpinner();
+                    } else {
+                        const video = document.getElementById('video');
+
+                        const source = video.getElementsByTagName('source');
+                        source[0].src = response.filename;
+                        video.load();
+                        isVideoCreatedOnce = true;
+                        hideOverlayAndSpinner();
+                    }
+                }
+            };
+
+            let vid = document.getElementById('video');
+            let w__ = vid.width;
+            let h__ = vid.height;
+            showOverlayAndSpinner();
+            xhr.send(JSON.stringify({'image_datas': image_datas, 'image_durations': image_widths, 'image_trans_in': image_entry, 'image_trans_out': image_exit, 'audio_datas': audio_datas, 'audio_durations' : audio_widths, 'width' : w__, 'height' : h__}));
+        }
+
+        document.querySelector(".btn-circle-download").addEventListener("click", function() {
+            const video = document.getElementById('video');
+            const source = video.getElementsByTagName('source');
+            const videoUrl = source[0].src;
+            
+            if (isVideoCreatedOnce) {
+                this.classList.add("load");
+                setTimeout(function() {
+                    document.querySelector(".btn-circle-download").classList.add("done");
+
+                    setTimeout(function() {
+                        const anchor = document.createElement('a');
+                        anchor.href = videoUrl;
+                        anchor.download = 'video.mp4'; 
+                        anchor.click();
+                    }, 100);
+                }, 1000);
+                setTimeout(function() {
+                    document.querySelector(".btn-circle-download").classList.remove("load", "done");
+                }, 5000);
+            } else {
+                window.alert("No video available for download.");
+            }
+        });
+
+    </script>
+</body>
+</html>

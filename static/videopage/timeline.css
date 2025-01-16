@@ -1,0 +1,43 @@
+.time-cell {
+    min-width: 75px;
+    max-width: 75px;
+
+    height: 15px;
+
+    border-style: none;
+    background-color: black;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: flex-start;
+    align-items: center;
+    
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.time-left-div{ 
+    background-color: gray;
+    height: 100%;
+    width: 2%;
+}
+
+.time-left-div-bw{ 
+    background-color: gray;
+    height: 50%;
+    width: 2%;
+}
+
+.time-num {
+    font-size: small;
+    font-family:'Times New Roman', Times, serif;
+
+    margin-left: 3px;
+    margin-right: 1px;
+    color: white;
+}
+
+/*
+    we'll assume 10px for a second
+*/

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="./static/login/loginstyle.css" rel="stylesheet">
+    <link href="./static/loader/loader.css" rel="stylesheet">
+
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+</head>
+<body>
+    <div id="outermost2">
+        <h2 id = "sign-head" style="letter-spacing: 3px; font-size:x-large; font-family: 'Times New Roman', Times, serif; font-weight: normal;" >Create Account!</h2>
+        
+        <div style="width: 100%;" class="input-container">
+        <input type="text" class="in" id="s-user-name" onkeyup="validName()" onkeydown="handleKeyPress(event)">
+        <label for="s-user-name">Username</label>
+        </div>
+        <div class="error" id="nameError"></div>
+
+        <div style="width: 100%;" class="input-container">
+        <input type="email" class="in" id="s-email" onkeyup="validEmail()" onkeydown="handleKeyPress(event)">
+        <label for="s-email">Email</label>
+        </div>
+        <div class="error" id="emailError"></div>
+
+        <div id="pwordDiv" class="input-container">
+            <input type="password" class="in" id="passwordInput" name="passwd" onkeyup="validPass()" onkeydown="handleKeyPress(event)">
+            <label for="passwordInput">Password</label>
+            <button id="eyeIcon2" onclick="togglePasswordVisibility()">
+                <img src="./static/login/eye.png" alt="eye" id="eyeimg">
+            </button>
+        </div>
+        <div class="error" id="passError"></div>
+        
+        <button class="signin" id="ssubmit" formmethod="post" style="margin-top: 10%;" onclick="validateAndSubmit()">Create Account</button>
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div id="spinner" class="loader"> 
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div> 
+    </div>
+    <script src="./static/loader/loader.js"></script>
+    <script src="./static/login/script.js"></script>
+
+    <script>
+        hideOverlayAndSpinner();
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById("ssubmit").click(); // Simulate button click
+            }
+        }
+
+        function validName() {
+            let name = document.getElementById('s-user-name').value;
+            let nameError = document.getElementById('nameError');
+
+            if (name === '') {
+                nameError.innerText = 'Name is required';
+                nameError.style.display = 'flex';
+                isValid = false;
+            }else {
+                nameError.style.display = 'none';
+            }
+        }
+
+        function validEmail() {
+            let email = document.getElementById('s-email').value;
+            let emailError = document.getElementById('emailError');
+
+            if (email === '') {
+                emailError.innerText = 'Email is required';
+                emailError.style.display = 'flex';
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                emailError.innerText = 'Invalid email format';
+                emailError.style.display = 'flex';
+                isValid = false;
+            }else {
+                emailError.style.display = 'none';
+            }
+        }
+
+        function validPass() {
+            let pass = document.getElementById('passwordInput').value;
+            let passError = document.getElementById('passError');
+
+            if (pass === '') {
+                passError.innerText = 'Password is required';
+                passError.style.display = 'flex';
+                isValid = false;
+            }else {
+                passError.style.display = 'none';
+            }
+        }
+
+        function validateAndSubmit() {
+            let name = document.getElementById('s-user-name').value;
+            let email = document.getElementById('s-email').value;
+            let nameError = document.getElementById('nameError');
+            let emailError = document.getElementById('emailError');
+            
+            let pass = document.getElementById('passwordInput').value;
+            let passError = document.getElementById('passError');
+            
+            let isValid = true;
+
+            // Validate name
+            if (name === '') {
+                nameError.innerText = 'Name is required';
+                nameError.style.display = 'flex';
+                isValid = false;
+            }else {
+                nameError.style.display = 'none';
+            }
+
+            // Validate email
+            if (email === '') {
+                emailError.innerText = 'Email is required';
+                emailError.style.display = 'flex';
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                emailError.innerText = 'Invalid email format';
+                emailError.style.display = 'flex';
+                isValid = false;
+            }else {
+                emailError.style.display = 'none';
+            }
+
+            if (pass === '') {
+                passError.innerText = 'Password is required';
+                passError.style.display = 'flex';
+                isValid = false;
+            }else {
+                passError.style.display = 'none';
+            }
+
+            if (isValid) {
+                let formData = new FormData();
+                formData.append('s-name', name);
+                formData.append('s-email', email);
+                formData.append('s-password', pass);
+    
+                // Send AJAX request to Flask server
+
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '/signup', true); 
+                xhr.onload = function() {
+                    hideOverlayAndSpinner();
+                    var res = this.responseText;
+                    res_json = JSON.parse(res);
+
+                    if(res_json.status == 'already exists') {
+                        window.alert("User already registered. Kindly login!\nRedirecting...");
+                    }else if(res_json.status  == 'success') {
+                        window.alert("User registered successfully!");
+                        window.location.href = "/login";
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    // Handle error if AJAX request fails
+                    console.error('Error occurred during AJAX request');
+                };
+
+                showOverlayAndSpinner();
+                xhr.send(formData);
+            }
+        }
+
+        function isValidEmail(email) {
+        // Basic email format validation
+            let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+    </script>
+</body>
+</html>

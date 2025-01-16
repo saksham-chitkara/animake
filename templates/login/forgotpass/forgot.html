@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login/forgotpass/styles.css') }}">
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h2>Forgot Password</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form id="forgotPasswordForm" method="POST" action="{{ url_for('forgot_password') }}">
+            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            <div id="errorBox" class="error-box"></div>
+            <input type="submit" id="resetPasswordBtn" value="Get OTP">
+        </form>
+        <p class="message">An OTP will be sent to your email.</p>
+        <form method="POST" action="/verify_otp">
+            <input type="text" id="otp" name="otp" placeholder="Enter your OTP" pattern="\d{6}" required>
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="submit" value="Verify OTP">
+        </form>
+        
+    </div>
+    <script src="{{ url_for('static', filename='login/forgotpass/script.js') }}"></script>
+    <script>
+
+    function checkOTP() {
+        let el = document.getElementById("otp").value;
+        let el2 = document.getElementById("correct_otp").value;
+  
+        if(el == el2) {
+            window.location.href = "/reset_password/" + document.getElementById("user_email").value;
+        }else {
+            window.alert("INCORRECT OTP IS ENTERED!");
+            document.getElementById("otp").value = "";
+        }
+    }
+    </script>
+</body>
+</html>

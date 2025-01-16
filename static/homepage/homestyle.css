@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --secondary-color: #151226;
+    --contrast-color: #BF307F;
+  }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: -10;
+    background-color: var(--contrast-color);
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+    justify-content: space-around;
+    align-items: center;
+    color: #fff;
+    animation: expand .8s ease forwards;
+    background-color: var(--secondary-color);
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: all .8s ease;
+
+    /* border: 1px solid pink; */
+  }
+  
+  .container_content {
+    /* border: 1px solid white; */
+
+   width: 50%;
+  }
+  
+  .container_content_inner {
+    /* border: 1px solid white; */
+
+    width: 80%;
+    margin-left: 80px;
+  }
+  
+  .container_outer_img {
+    /* border: 1px solid white; */
+
+    margin: 50px;
+    width: 50%;
+    overflow: hidden;
+  }   
+      
+  .container_img {
+    width: 100%;
+    animation: slideIn 1.5s ease-in-out forwards;
+  }
+  
+  .par {
+    height: auto;
+    overflow: hidden;
+
+    font-size: 170%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 3%;
+
+  }
+  
+  pre{
+    line-height: 28px;
+    transform: translateY(300px);
+    animation: slideUp .8s ease-in-out forwards .8s;
+  }
+  
+  .btns {
+    height: 100%;
+    position: relative;
+    width: 40%;
+    overflow: hidden;
+  }
+  
+  .btns_more {
+    background: transparent;
+    border: 1px solid var(--contrast-color);
+    color: white;
+    background-color: #BF307F;
+    font-size: 150%;
+    text-transform: uppercase;
+    position: relative;
+    margin-top: 15px;
+    outline: none;
+    transform: translateY(50px);
+    animation: slideUp .8s ease-in-out  forwards 1s;
+
+    border-radius: 10px;
+
+    padding: 8%;
+    font-family: Arial, Helvetica, sans-serif;
+
+    opacity: 0%;
+  }
+  
+  .title {
+    overflow: hidden;
+    height: auto;
+    font-size: 170%;
+    /* font-family: Arial, Helvetica, sans-serif; */
+
+  }
+  
+  h1 {
+      color: var(--contrast-color);
+      margin-bottom: 20px;
+      transform: translateY(100px);
+      animation: slideUp .8s ease forwards .5s;
+      /* font-family: Arial, Helvetica, sans-serif; */
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateX(500px) scale(.2);
+    }
+    100% {
+      transform: translateX(0px) scale(1);
+    }
+  }
+  
+  @keyframes slideUp {
+    0% {
+      transform: translateY(300px);
+      opacity: 0%;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 100%;
+    }
+  }
+  
+  @keyframes expand {
+    0% {
+      transform: translateX(1400px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+  
+
+#login{
+    background-color: rgb(207, 202, 202);
+    color: black;
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 1.2%;
+}
+
+#signup{
+    background-color: #7F30BF;
+    /* background-color: #E6D3B2; */
+    color: white;
+    border: none;
+
+    margin-left: 0.7%;
+
+    border-radius: 10px;
+
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 1.2%;
+}
+
+nav{
+    background-color: #BF307F;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    padding: 2%;
+
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    left: 0%;
+
+}
+
+#logo{
+    /* border: 1px solid white; */
+
+    position: absolute;
+    /* top: 4%; */
+    left: 3%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo-img{
+    background-color: transparent;
+    width: 100px;
+    height: 100px;
+
+    float: right;
+}
+
+#heading{
+    font-size: 180%;
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: #151226;
+}
+
+  
+button:active{
+  transform: scale(0.95); 
+  }
+  
+  button:hover{
+  cursor: pointer;
+  }

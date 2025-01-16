@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Home</title>
+    <link href="./static/homepage/homestyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="./static/loader/loader.css">
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+</head>
+<body>
+    
+    <div class= 'container'>
+        <nav>
+            <button id="login" onclick="clickAction()">Log in</button>    
+            <button id="signup" onclick="window.open('/signup');">Sign up</button>
+    
+            <div id="logo">
+                <img src="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" id="logo-img">
+            </div>
+            
+        </nav>
+
+        <div class="container_content">
+            <div class="container_content_inner">
+                <div class="title">
+                    <h1>Online Video Editor</h1>
+                </div>
+                <div class="par">
+                    <pre>
+Create your own video and edit it in any
+  way on both your phone and computer
+                    </pre>
+                </div>
+                <div class="btns">
+                    <button class='btns_more' onclick="openUploader()"> Get Started </button>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="access_token" value="{{ acc_token }}">
+        <input type="hidden" id="username" value="{{ user_name }}"> 
+
+        <div class="container_outer_img">
+            <div class="img-inner">
+                <img src='https://images.unsplash.com/photo-1517911041065-4960862d38f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80'  alt="" class="container_img"/>
+            </div>
+        </div>
+    </div>
+    
+    <div id="overlay" class="overlay">
+        <div id="spinner" class="loader"> 
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div> 
+    </div>
+
+    <script src="./static/loader/loader.js"></script>
+    <script>
+        hideOverlayAndSpinner();
+
+        let access_token = document.getElementById("access_token").value;
+        let username = document.getElementById("username").value;
+
+        var showLogin = true;
+        function check_login() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/isLoggedIn', true);
+            xhr.onload = function() {
+                hideOverlayAndSpinner();
+                if (xhr.status === 200) {
+                    var res_json = JSON.parse(xhr.responseText);
+                    var string = res_json.message;
+
+                    console.log(string);
+                    if(string == 'yes') {
+                        showLogin = false;
+                    }else if (string == 'no') {
+                        showLogin = true;
+                    }
+                    displayLog();
+                } else if (xhr.status === 401) {
+                    window.alert("Username and Password don't match.\nRetry...");
+                } else {
+                    console.error('Error occurred during form submission:', xhr.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Error occurred during AJAX request');
+            };
+
+            showOverlayAndSpinner();
+            xhr.send();
+        }
+
+        check_login();
+        function displayLog() {
+            if(!showLogin) {
+                document.getElementById('login').innerHTML = "Log Out";
+                document.getElementById('signup').style.display = "none";
+            }else{
+                document.getElementById('login').innerHTML = "Log In";
+                document.getElementById('signup').style.display = "flex";
+            }
+        }
+
+        function clickAction() {
+            if(showLogin) {
+                window.location.href = '/login';
+            }else {
+                window.location.href = '/logout';
+                check_login();
+            }
+        }
+
+        function openUploader() {
+            check_login();
+            if(showLogin)
+                window.location.href = '/login';
+            else {
+                window.location.href = '/upload?access_token=' + access_token;
+            }
+        }
+    </script>
+</body>
+</html>

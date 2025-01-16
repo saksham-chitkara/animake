@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Image to Video Maker</title>
+
+    <link rel="stylesheet" href="./static/loader/loader.css">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            width: 96%;
+
+            margin-top: 2%;
+            margin-left: 2%;
+
+            background: rgb(58, 1, 58);
+
+            color: #ffffff;
+            padding: 2%;
+            box-sizing: border-box;
+
+            font-size: 15px;
+            text-align: left;
+
+            border-radius: 30px;
+
+            display: flex;
+            flex-direction: row;
+
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            width: 95%;
+        }
+
+        .header #home {
+            width: 5%;
+
+            background-color: transparent;
+            border-style: none;
+            margin-left: 2%;
+        }
+
+        #home > img {
+            background-color: transparent;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .section h2 {
+            color: rgb(58, 1, 58);
+            text-align: center;
+
+            width: 100%;
+        }
+
+        .section p {
+            text-align: center;
+            width: 100%;
+        }
+
+        #up-btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .upload-btn {
+            background-color: rgb(58, 1, 58);
+            color: #ffffff;
+            padding: 1.5% 4%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+            font-size: 20px;
+        }
+        .upload-tn {
+            background-color: rgb(58, 1, 58);
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .proj-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+
+            box-sizing: border-box;
+
+            width: 100%;
+        }
+
+        .proj-section h2 {
+            color: rgb(58, 1, 58);
+            text-align: center;
+
+            width: 100%;
+        }
+    
+        .projects-list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            align-items: center;
+            justify-content: center;
+
+            padding-left: 7%;
+            padding-right: 7%;
+
+            box-sizing: border-box;
+        }
+
+        .project {
+            width: 31%;
+            height: 35%;
+
+            display: flex;
+            flex-direction: column;
+            
+            align-items: center;
+            flex-direction: center;
+
+            margin-left: 1%;
+            margin-right: 1%;
+
+            margin-top:2%;
+            margin-bottom: 2%;
+
+            border-radius: 20px;
+        }
+        
+        .project_paragraph {
+            width: 80%;
+            font-size: 20px;
+            margin: 0; /* Removes default paragraph margin for better alignment */
+            text-align: left;
+        }
+
+        .proj-details {
+            display: flex;
+            flex-direction: row; 
+            justify-content: space-between;
+
+            width: 100%;
+            align-items: center;
+
+            box-sizing: border-box;
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .proj-desc {
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            border: solid 1px black;
+            width: 100%;
+        }
+
+        .proj-title {
+            font-size: 20px;
+            font-weight: bolder;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            width: 100%;
+            text-align: center;
+        }
+
+        button:active{
+            transform: scale(0.95); 
+        }
+
+        button:hover{
+            cursor: pointer;
+        }
+
+        #profile_icon{
+            width: 100%;
+            height: 100%;
+
+            background-color: transparent;
+            border: 2px solid white;
+
+            margin-left: 5%;
+            border-radius: 5px;
+
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        #profile{
+            width: 70px;
+            height: 50px;
+
+            background-color: transparent;
+            border-style: none;
+
+            border-radius: 5px;
+        }
+
+        .popupMenu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+
+            width: 60%;
+            height: 70%;
+
+            top: 15%;
+            left: 20%;
+        }
+
+        #inner_profile{
+            width: 200px;
+            height: 200px;
+        }
+
+        #inner_profile_image{
+            width: 200px;
+            height: 200px;
+
+            border-radius: 5px;
+
+            background-color: black;
+        }
+
+        #plus{
+            width: 10%;
+            height: 10%;
+        }
+
+        #small-btns{
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+
+            flex-direction: row;
+        }
+
+        #add_profile{
+            width: 20px;
+            height: 20px;
+        }
+
+        #del_profile{
+            width: 20px;
+            height: 20px;
+            
+        }
+
+        #outermost{
+            border: 1px solid black;
+
+            width: 90%;
+            height: 90%;
+
+            margin-top: 3%;
+            margin-left: 5%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #details{
+            width: 100%;
+            height: 40%;
+
+            /* border: 1px solid black; */
+
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            margin-top: 5%;
+        }
+
+        #suname, #smail{
+            font-size: 150%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-style: italic;
+
+            margin-bottom: 3%;
+        }
+
+        #profile_rel{
+            display: flex;
+            flex-direction: column;
+
+            padding-top: 8%;
+        }
+
+    </style>
+    <link href="./static/loader/loader.css" rel="stylesheet">
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+</head>
+<body>
+
+    <div class="header">
+        <h1>User Dashboard</h1>
+        <button id="profile">
+            <img src="" title="Profile" id="profile_icon" class="profile-image" width="70px" height="50px">
+        </button>
+
+        <button id="home" onclick="homeOpen()">
+            <img src="./static/dashboard/home.png" width="40px" height="40px">
+        </button>
+    
+        <div id="popupMenu" class="popupMenu">
+            <div id="outermost">
+                <div id="profile_rel">
+                    <div id="inner_profile">
+                        <img id="inner_profile_image" src="/user/{{ user_name }}/profile_image" title="Profile" class="profile-image">
+                    </div>
+                    <div id="small-btns" style="margin-top: 2%;">
+                        <div id="plus">
+                            <img id="add_profile" src="./static/dashboard/plus.png" title="Add Profile" onclick="profile()">
+                        </div>
+    
+                        <div id="cross">
+                            <img id="del_profile" src="./static/dashboard/remove.png" title="Delete Profile" onclick="removeProfilePhoto()">
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="details">
+                    <div id="suname">username : 
+                    </div>
+                    <div id="smail">email : 
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+<input type="hidden" id="access_token" value="{{ acc_token }}">
+<input type="hidden" id="username" value="{{ user_name }}"> 
+
+<div class="dashboard-container">
+    <div class="section">
+        <h2>Welcome, {{user_name}}!</h2>
+        <p class="project_paragraph">Convert your images into videos / Browse through your previous video projects.</p>
+    </div>
+
+    <div class="section" id="up-btn">
+        <button class="upload-btn" onclick="uploadOpen()">New Video</button>
+    </div>
+
+    <div class="proj-section">
+        <h2>Previous Video Projects</h2>
+        <div class="projects-list">
+            {% for video in video_details %}
+                <div class="project">
+                    <img src="data:image/png;base64,{{ video.frame_blob }}" width="100%" height="200px" alt="frame1" class="proj-frame">
+                    <div class="proj-desc">
+                        <p class="proj-title">{{ video.project_name }}</p>
+                        <div class="proj-details">
+                            <p id="proj-created">{{ video.created }}</p> <!-- Format the date -->
+                            <p id="proj-time">{{ video.duration }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="overlay" class="overlay">
+    <div id="spinner" class="loader"> 
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div> 
+  </div>
+
+
+<script src="./static/loader/loader.js"></script>
+<script>
+    let acc = document.getElementById("access_token").value;
+    let username = document.getElementById("username").value; 
+
+    function uploadOpen() {
+        window.location.href= ("/upload?access_token=" + acc);
+    }
+
+    function homeOpen() {
+        window.location.href= ("/?access_token=" + acc);
+    }
+
+    window.onload = function() {
+        hideOverlayAndSpinner(); // Hide spinner when the page has fully loaded
+    };
+
+    document.getElementById('profile_icon').addEventListener('click', function() {
+        var popupMenu = document.getElementById('popupMenu');
+        if (popupMenu.style.display === 'block') {
+            popupMenu.style.display = 'none';
+        } else {
+            popupMenu.style.display = 'block';
+
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        var popupMenu = document.getElementById('popupMenu');
+        var popupBtn = document.getElementById('profile_icon');
+        if (!popupBtn.contains(event.target) && !popupMenu.contains(event.target)) {
+            popupMenu.style.display = 'none';
+        }
+    });
+
+    function profile() {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = "image/jpeg, image/png"; // Accept only JPG and PNG files
+        input.multiple = false; 
+        input.style.display = 'none';
+
+        input.addEventListener('change', function() {
+            var files = this.files;
+            if (files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    handleFileUpload(files[i]);
+                }
+            }
+        });
+        input.click();
+    }
+
+    function handleFileUpload(file) {
+        var uname = document.getElementById("username").value; // Assuming 'uname' is the username element's ID
+        
+        var formData = new FormData();
+        formData.append('username', uname); // Include the username in the form data
+        formData.append('image_file', file);
+
+        showOverlayAndSpinner();
+        fetch('/upload_profile_image', { // Corrected endpoint URL
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            hideOverlayAndSpinner();
+            if (response.ok) {
+                console.log('Profile image uploaded successfully....');
+                // Update profile image src
+                update_profile();
+            } else {
+                console.error('Error uploading profile image.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function update_profile() {
+        showOverlayAndSpinner();
+        fetch('/retrieve_profiles/' + username)
+            .then(response => response.json())
+            .then(data => {
+                hideOverlayAndSpinner();
+                if (data && data.image_blob) {
+                    var imageData = data.image_blob;
+                    var user_name_ = data.name;
+                    var user_email = data.email;
+
+                    var profileImageElements = document.querySelectorAll('.profile-image');
+                    profileImageElements.forEach(function(element) {
+                        element.src = "data:image/png;base64," + imageData; // Setting base64-encoded image data directly as src
+                    });
+
+                    document.getElementById("suname").innerHTML =  "username: " + user_name_
+                    document.getElementById("smail").innerHTML = "email: " + user_email
+                } else {
+                    console.error('No image data found in the response.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    update_profile();
+
+    function removeProfilePhoto() {
+        let username = document.getElementById("username").value;
+
+        // Send an AJAX request to the Flask endpoint to remove the profile photo
+        fetch('/remove_profile_image', {
+            method: 'POST',
+            body: new URLSearchParams({ username: username }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+
+        .then(response => {
+            if (response.ok) {
+                // Reset the profile image to a default image or clear it
+                list = document.getElementsByClassName('profile-image')
+                for(var i = 0; i < list.length; i++){
+                    list[i].src  = './static/dashboard/profile.png';
+                }
+                
+                console.log("Profile photo removed successfully");
+            } else {
+                console.error("Failed to remove profile photo");
+            }
+        })
+
+        .catch(error => {
+            console.error("Error occurred while removing profile photo:", error);
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+body::before {
+    content: '';
+    position: fixed;
+    opacity: 0.6;
+
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url('login_bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    z-index: -1;
+}
+
+#log-head, #sign-head {
+    color:rgb(235, 65, 94);
+    animation: rotDance 1s linear 0s infinite ;
+}
+
+@keyframes rotDance {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    25% {
+        transform: rotateZ(2deg);
+    }
+    50% {
+        transform: rotateZ(0deg);
+    }
+    75% {
+        transform: rotateZ(-2deg);
+    }
+    100% {
+        transform: rotateZ(0deg);
+    }
+}
+
+#outermost, #outermost2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 8%;
+    left: 35%;
+    width: 25%;
+    padding: 3%;
+    z-index: 10;
+    background-color: #F1F1F1;
+    box-shadow: 10px 10px 5px gray;
+    border-radius: 20px;
+}
+
+.in {
+    font-size: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 3%;
+    margin-top: 5%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#passwordInput {
+    font-size: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 3%;
+    margin-top: 5%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#pwordDiv {
+    width: 100%;
+    position: relative;
+    margin-top: 3%;
+}
+
+.error {
+    width: 100%;
+    padding: 2% 3% 2% 3%;
+    color: #fff;
+    background-color: rgb(235, 65, 94);
+    
+    margin-bottom: 1%;
+    margin-top: 1%;
+
+    outline: none;
+    border-style: none;
+
+
+    box-sizing: border-box;
+    display: none;
+}
+
+.signin {
+    background-color: rgb(237, 98, 121);
+    color: #FFFFFF;
+    width: 100%;
+    padding: 4% 5%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    border: 1px solid black;
+    margin-top: 6%;
+    margin-bottom: 3%;
+
+    border-radius: 10px;
+    
+    /* animation: stretch_relax 1s linear 0s infinite forwards; */
+}
+
+.signin:active {
+    transform: scale(0.95); /* Scale down the button on click */
+    box-shadow: 5px 5px darkgray;
+}
+
+@keyframes stretch_relax {
+    0% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scaleX(1.05);
+    }
+    100% {
+        transform: scaleX(1)
+    }
+}
+
+.forgot {
+    text-align: left;
+    width: 100%;
+    font-size: 90%;
+    color: rgb(235, 65, 94);
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 1%;
+    margin-top: 5%;
+}
+
+#no_acc {
+    text-align: left;
+    width: 100%;
+    font-size: 90%;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 1%;
+    margin-top: 5%;
+}
+
+#eyeimg {
+    background-color: transparent;
+    border: none;
+    width: 20px;
+    height: 20px;
+}
+
+#eyeIcon, #eyeIcon2 {
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    right: 2%;
+    top: 45%;
+}
+
+.input-container {
+    margin-top: 3%;
+    position: relative;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.input-container input:focus {
+    border-color: rgb(235, 65, 94);
+    border-style: solid;
+    border-width: 1.5px;
+
+    outline: none;
+}
+
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transition: top 0.3s, font-size 0.3s;
+    pointer-events: none;
+    color: #000;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top : 50%;
+    font-size : 16px;
+    color : #999;
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link href="./static/login/loginstyle.css" rel="stylesheet">
+    <link href="./static/loader/loader.css" rel="stylesheet">
+
+    <link rel="icon" href="./static/homepage/Animake(1)-Photoroom.png-Photoroom.png" type="image/x-icon">
+</head>
+<body>
+    <div id="outermost">
+        <h2 id = "log-head" style="letter-spacing: 3px; font-size:x-large; font-family: 'Times New Roman', Times, serif; font-weight: normal;">LOGIN</h2>
+
+        <div style="width: 100%;" class="input-container">
+            <input type="text" class="in" id="l-user-name" onkeyup="validName()" onkeydown="handleKeyPress(event)">
+            <label for="l-user-name">Username</label>
+        </div>
+        <div class="error" id="nameError">The field is empty!</div>
+
+        <div id="pwordDiv" class="input-container">
+            <input type="password" class="in" id="passwordInput" name="passwd" onkeyup="validPass()" onkeydown="handleKeyPress(event)">
+            <label for="passwordInput">Password</label>
+            <button id="eyeIcon" onclick="togglePasswordVisibility()">
+                <img src="./static/login/eye.png" alt="eye" id="eyeimg">
+            </button>
+        </div>
+        <div class="error" id="passError">The field is empty!</div>
+
+        <div class="forgot">
+            <a href="/forgot-pass" title="create new password">Forgot Password?</a>
+        </div>
+
+        <button class="signin" formmethod="post" id = "lsubmit" onclick="validateAndSubmit()">Sign In</button>
+        
+        <div id="no_acc">
+            Don't have an account?
+        </div>
+        
+        <button class="signin" onclick="window.open('/signup');">Create Account</button>
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div id="spinner" class="loader"> 
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div> 
+    </div>
+
+    <script src="./static/login/script.js"></script>
+    <script src="./static/loader/loader.js"></script>
+    <script>
+        hideOverlayAndSpinner();
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById("lsubmit").click(); // Simulate button click
+            }
+        }
+
+        function validName() {
+            let name = document.getElementById('l-user-name').value;
+            let nameError = document.getElementById('nameError');
+
+            if (name === '') {
+                nameError.innerText = 'Name is required';
+                nameError.style.display = 'flex';
+                isValid = false;
+            }else {
+                nameError.style.display = 'none';
+            }
+        }
+
+        function validPass() {
+            let pass = document.getElementById('passwordInput').value;
+            let passError = document.getElementById('passError');
+
+            if (pass === '') {
+                passError.innerText = 'Password is required';
+                passError.style.display = 'flex';
+                isValid = false;
+            }else {
+                passError.style.display = 'none';
+            }
+        }
+
+        function validateAndSubmit() {
+        let name = document.getElementById('l-user-name').value;
+        let pass = document.getElementById('passwordInput').value;
+        let nameError = document.getElementById('nameError');
+        let passError = document.getElementById('passError');
+        let isValid = true;
+        
+        if (name === '') {
+            nameError.innerText = 'Name is required';
+            nameError.style.display = 'flex';
+            isValid = false;
+        } else {
+            nameError.style.display = 'none';
+        }
+
+        // Validate password
+        if (pass === '') {
+            passError.innerText = 'Password is required';
+            passError.style.display = 'flex';
+            isValid = false;
+        } else {
+            passError.style.display = 'none';
+        }
+
+        if (isValid) {
+            // Create FormData object and append form data
+            let formData = new FormData();
+            formData.append('l-name', name);
+            formData.append('l-password', pass);
+
+            // Send AJAX request to Flask server
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/login', true);
+            xhr.onload = function() {
+                hideOverlayAndSpinner();
+                if (xhr.status === 200) {
+                    // Parse response JSON
+                    var res_json = JSON.parse(xhr.responseText);
+
+                    if (res_json.message !== '') {
+                        localStorage.setItem("logged_in", res_json.access_token);
+                        
+                        var string = res_json.message + " is now logged in!";
+                        window.alert(string);
+                        
+                        // Redirect to dashboard page with access token
+
+                        if(res_json.user_role == 'user') {
+                            showOverlayAndSpinner();
+                            window.location.href = '/dashboard?access_token=' + res_json.access_token;
+                        }else if(res_json.user_role == 'admin') {
+                            showOverlayAndSpinner();
+                            window.location.href = '/admin';
+                        }
+                    }
+                } else if (xhr.status === 401) {
+                    // Handle invalid credentials
+                    window.alert("Username and Password don't match.\nRetry...");
+                } else {
+                    // Handle other errors
+                    console.error('Error occurred during form submission:', xhr.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                // Handle error if AJAX request fails
+                console.error('Error occurred during AJAX request');
+            };
+
+            showOverlayAndSpinner();
+            xhr.send(formData);
+        }
+    }
+    </script>
+
+</body>
+</html>
